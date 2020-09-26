@@ -11,13 +11,8 @@ Resources:
       KeySchema:
         - AttributeName: connectionId
           KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: ConnectionsChannelIndex
-          KeySchema:
-            - AttributeName: channelId
-              KeyType: HASH
-          Projection:
-            ProjectionType: 'ALL'
+        - AttributeName: channelId
+          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
   SnippetsTable:
@@ -32,11 +27,6 @@ Resources:
       KeySchema:
         - AttributeName: snippetId
           KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: SnippetsChanelIndex
-          KeySchema:
-            - AttributeName: channelId
-              KeyType: HASH
-          Projection:
-            ProjectionType: 'ALL'
+        - AttributeName: channelId
+          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST

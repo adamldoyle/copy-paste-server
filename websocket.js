@@ -51,7 +51,6 @@ const joinChannel = async (connectionId, channelId) => {
   });
   const results = await dynamodb.query({
     TableName: process.env.snippetsTableName,
-    IndexName: 'SnippetsChannelIndex',
     KeyConditionExpression: 'channelId = :channelId',
     ExpressionAttributeValues: {
       ':channelId': channelId,
@@ -80,7 +79,6 @@ const removeConnectionFromChannel = async (connectionId) => {
 const getChannelConnections = async (channelId) => {
   const results = await dynamodb.query({
     TableName: process.env.connectionsTableName,
-    IndexName: 'ConnectionsChannelIndex',
     KeyConditionExpression: 'channelId = :channelId',
     ExpressionAttributeValues: {
       ':channelId': channelId,
