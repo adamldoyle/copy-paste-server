@@ -70,10 +70,21 @@ const leaveChannel = async (connectionId, channelId) => {
 };
 
 const removeConnectionFromChannel = async (connectionId) => {
-  await dynamodb.delete({
+  const channels = await dynamodb.scan({
     TableName: process.env.connectionsTableName,
-    Key: { connectionId },
+    FilterExpression: 'connectionId = :connectionId',
+    ExpressionAttributeValues: {
+      ':connectionId': connectionId,
+    },
   });
+  await Promise.allSettled(
+    channels.Items.map((item) =>
+      dynamodb.delete({
+        TableName: process.env.connectionsTableName,
+        Key: { connectionId },
+      }),
+    ),
+  );
 };
 
 const getChannelConnections = async (channelId) => {
