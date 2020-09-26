@@ -11,7 +11,6 @@ export const connectionHandler = websocketHandler(async (event) => {
   console.log('event', JSON.stringify(event));
   console.log('connectionId', connectionId);
   console.log('callbackUrlForAWS', callbackUrlForAWS);
-  return JSON.parse(event.body);
 });
 
 export const defaultHandler = websocketHandler(async (event) => {
