@@ -47,6 +47,17 @@ provider:
       Resource:
         - 'Fn::GetAtt': [ConnectionsTable, Arn]
         - 'Fn::GetAtt': [SnippetsTable, Arn]
+        - {
+            'Fn::Join':
+              [
+                '/',
+                [
+                  { 'Fn::GetAtt': [ConnectionsTable, Arn] },
+                  'index',
+                  'ChannelIndex',
+                ],
+              ],
+          }
 
 resources:
   - ${file(resources/dynamodb-tables.yml)}
