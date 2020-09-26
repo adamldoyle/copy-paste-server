@@ -55,7 +55,7 @@ const joinChannel = async (connectionId, channelId) => {
       ':channelId': channelId,
     },
   });
-  return results.Items;
+  return results.Items.map((item) => item.snippet);
 };
 
 const leaveChannel = async (connectionId, channelId) => {
