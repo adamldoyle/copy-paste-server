@@ -25,9 +25,18 @@ Resources:
     Properties:
       TableName: ${self:custom.snippetsTableName}
       AttributeDefinitions:
+        - AttributeName: snippetId
+          AttributeType: S
         - AttributeName: channelId
           AttributeType: S
       KeySchema:
-        - AttributeName: channelId
+        - AttributeName: snippetId
           KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: ChanelIndex
+          KeySchema:
+            - AttributeName: channelId
+              KeyType: HASH
+          Projection:
+            ProjectionType: 'ALL'
       BillingMode: PAY_PER_REQUEST

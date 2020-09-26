@@ -2,6 +2,7 @@ import websocketHandler from './libs/websocketHandler';
 import util from 'util';
 import dynamodb from './libs/dynamodb';
 import AWS from 'aws-sdk';
+import { v4 } from 'uuid';
 
 const sendMessageToClient = (url, connectionId, payload) =>
   new Promise((resolve, reject) => {
@@ -50,12 +51,16 @@ const joinChannel = async (connectionId, channelId) => {
   });
   const results = await dynamodb.query({
     TableName: process.env.snippetsTableName,
+    IndexName: 'ChannelIndex',
     KeyConditionExpression: 'channelId = :channelId',
     ExpressionAttributeValues: {
       ':channelId': channelId,
     },
   });
-  return results.Items.map((item) => item.snippet);
+  return results.Items.map((item) => ({
+    snippetId: item.snippetId,
+    snippet: item.snippet,
+  }));
 };
 
 const leaveChannel = async (connectionId, channelId) => {
@@ -85,14 +90,17 @@ const getChannelConnections = async (channelId) => {
 };
 
 const saveSnippet = async (event, channelId, snippet) => {
+  const snippetId = v4();
   await dynamodb.put({
     TableName: process.env.snippetsTableName,
     Item: {
+      snippetId,
       channelId,
       snippet,
     },
+    ReturnValues: 'ALL_NEW',
   });
-  await sendMessageToChannel(event, channelId, { snippet });
+  await sendMessageToChannel(event, channelId, { snippetId, snippet });
 };
 
 export const connectionHandler = websocketHandler(async (event) => {

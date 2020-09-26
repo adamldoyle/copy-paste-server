@@ -46,13 +46,24 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - 'Fn::GetAtt': [ConnectionsTable, Arn]
-        - 'Fn::GetAtt': [SnippetsTable, Arn]
         - {
             'Fn::Join':
               [
                 '/',
                 [
                   { 'Fn::GetAtt': [ConnectionsTable, Arn] },
+                  'index',
+                  'ChannelIndex',
+                ],
+              ],
+          }
+        - 'Fn::GetAtt': [SnippetsTable, Arn]
+        - {
+            'Fn::Join':
+              [
+                '/',
+                [
+                  { 'Fn::GetAtt': [SnippetsTable, Arn] },
                   'index',
                   'ChannelIndex',
                 ],
