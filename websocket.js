@@ -77,6 +77,7 @@ const removeConnectionFromChannel = async (connectionId) => {
       ':connectionId': connectionId,
     },
   });
+  console.log('channels', JSON.stringify(channels.Items));
   await Promise.allSettled(
     channels.Items.map((item) =>
       dynamodb.delete({
