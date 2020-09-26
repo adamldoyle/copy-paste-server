@@ -113,7 +113,7 @@ export const defaultHandler = websocketHandler(async (event) => {
         event.requestContext.connectionId,
         payload.data.channelId,
       );
-      return { snippets };
+      return { action: 'CHANNEL_JOINED', data: { snippets } };
     case 'LEAVE_CHANNEL':
       await leaveChannel(
         event.requestContext.connectionId,
@@ -122,6 +122,6 @@ export const defaultHandler = websocketHandler(async (event) => {
       break;
     case 'SAVE_SNIPPET':
       await saveSnippet(event, payload.data.channelId, payload.data.snippet);
-      return { snippet: payload.data.snippet };
+      return { action: 'NEW_SNIPPET', data: { snippet: payload.data.snippet } };
   }
 });
