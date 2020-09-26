@@ -98,7 +98,6 @@ const saveSnippet = async (event, channelId, snippet) => {
       channelId,
       snippet,
     },
-    ReturnValues: 'ALL_NEW',
   });
   await sendMessageToChannel(event, channelId, { snippetId, snippet });
 };
