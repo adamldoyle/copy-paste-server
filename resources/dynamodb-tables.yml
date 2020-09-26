@@ -1,0 +1,12 @@
+Resources:
+  SnippetsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.snippetsTableName}
+      AttributeDefinitions:
+        - AttributeName: connectionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: connectionId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST

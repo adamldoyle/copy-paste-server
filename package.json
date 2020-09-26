@@ -1,0 +1,32 @@
+{
+  "name": "copy-paste-server",
+  "version": "1.0.0",
+  "description": "Server for managing remote copy-paste via websockets",
+  "scripts": {
+    "test": "serverless-bundle test --runInBand",
+    "test:watch": "serverless-bundle test --watch --runInBand",
+    "test:coverage": "del-cli coverage && serverless-bundle test --coverage --runInBand --silent",
+    "package": "serverless package",
+    "prettier": "prettier .",
+    "prettify": "prettier --write ."
+  },
+  "pre-commit": [
+    "test",
+    "package"
+  ],
+  "author": "Adam Doyle <adamldoyle@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "del-cli": "^3.0.1",
+    "jest": "^25.5.4",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.1.1",
+    "serverless": "^2.0.0",
+    "serverless-bundle": "^3.0.0",
+    "serverless-dotenv-plugin": "^3.0.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.747.0",
+    "uuid": "^8.3.0"
+  }
+}

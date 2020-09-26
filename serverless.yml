@@ -1,0 +1,68 @@
+service: copy-paste-server
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-dotenv-plugin
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  snippetsTableName: ${self:custom.stage}-snippets
+
+lambdaPolicyXRay:
+  Effect: Allow
+  Action:
+    - xray:PutTraceSegments
+    - xray:PutTelemetryRecords
+  Resource: '*'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  tracing:
+    apiGateway: true
+    lambda: true
+  logs:
+    websocket: true
+
+  environment:
+    snippetsTableName: ${self:custom.snippetsTableName}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'Fn::GetAtt': [SnippetsTable, Arn]
+
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
+  - ${file(resources/dynamodb-tables.yml)}
+
+functions:
+  connectionHandler:
+    handler: websocket.connectionHandler
+    events:
+      - websocket:
+          route: $connect
+          routeResponseSelectionExpression: $default
+      - websocket:
+          route: $disconnect
+          routeResponseSelectionExpression: $default
+
+  defaultHandler:
+    handler: websocket.defaultHandler
+    events:
+      - websocket:
+          route: $default
+          routeResponseSelectionExpression: $default
