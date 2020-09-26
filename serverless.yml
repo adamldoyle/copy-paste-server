@@ -9,7 +9,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  connectionsTableName: ${self.custom.stage}-connections
+  connectionsTableName: ${self:custom.stage}-connections
   snippetsTableName: ${self:custom.stage}-snippets
 
 lambdaPolicyXRay:
