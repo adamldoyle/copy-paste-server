@@ -1,12 +1,33 @@
 Resources:
+  ConnectionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.connectionsTableName}
+      AttributeDefinitions:
+        - AttributeName: connectionId
+          AttributeType: S
+        - AttributeName: channelId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: connectionId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: ChannelIndex
+          KeySchema:
+            - AttributeName: channelId
+              KeyType: HASH
+          Projection:
+            ProjectionType: 'ALL'
+      BillingMode: PAY_PER_REQUEST
+
   SnippetsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: ${self:custom.snippetsTableName}
       AttributeDefinitions:
-        - AttributeName: connectionId
+        - AttributeName: channelId
           AttributeType: S
       KeySchema:
-        - AttributeName: connectionId
+        - AttributeName: channelId
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST

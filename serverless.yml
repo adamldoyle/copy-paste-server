@@ -9,6 +9,7 @@ plugins:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
+  connectionsTableName: ${self.custom.stage}-connections
   snippetsTableName: ${self:custom.stage}-snippets
 
 lambdaPolicyXRay:
@@ -30,6 +31,7 @@ provider:
     websocket: true
 
   environment:
+    connectionsTableName: ${self:custom.connectionsTableName}
     snippetsTableName: ${self:custom.snippetsTableName}
 
   iamRoleStatements:
@@ -43,10 +45,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
+        - 'Fn::GetAtt': [ConnectionsTable, Arn]
         - 'Fn::GetAtt': [SnippetsTable, Arn]
 
 resources:
-  - ${file(resources/api-gateway-errors.yml)}
   - ${file(resources/dynamodb-tables.yml)}
 
 functions:
