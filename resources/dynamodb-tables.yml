@@ -9,9 +9,9 @@ Resources:
         - AttributeName: channelId
           AttributeType: S
       KeySchema:
-        - AttributeName: connectionId
-          KeyType: HASH
         - AttributeName: channelId
+          KeyType: HASH
+        - AttributeName: connectionId
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
 
@@ -25,8 +25,8 @@ Resources:
         - AttributeName: channelId
           AttributeType: S
       KeySchema:
-        - AttributeName: snippetId
-          KeyType: HASH
         - AttributeName: channelId
+          KeyType: HASH
+        - AttributeName: snippetId
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
