@@ -12,7 +12,7 @@ Resources:
         - AttributeName: connectionId
           KeyType: HASH
       GlobalSecondaryIndexes:
-        - IndexName: ChannelIndex
+        - IndexName: ConnectionsChannelIndex
           KeySchema:
             - AttributeName: channelId
               KeyType: HASH
@@ -33,7 +33,7 @@ Resources:
         - AttributeName: snippetId
           KeyType: HASH
       GlobalSecondaryIndexes:
-        - IndexName: ChanelIndex
+        - IndexName: SnippetsChanelIndex
           KeySchema:
             - AttributeName: channelId
               KeyType: HASH

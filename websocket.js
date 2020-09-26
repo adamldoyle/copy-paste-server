@@ -51,7 +51,7 @@ const joinChannel = async (connectionId, channelId) => {
   });
   const results = await dynamodb.query({
     TableName: process.env.snippetsTableName,
-    IndexName: 'ChannelIndex',
+    IndexName: 'SnippetsChannelIndex',
     KeyConditionExpression: 'channelId = :channelId',
     ExpressionAttributeValues: {
       ':channelId': channelId,
@@ -80,7 +80,7 @@ const removeConnectionFromChannel = async (connectionId) => {
 const getChannelConnections = async (channelId) => {
   const results = await dynamodb.query({
     TableName: process.env.connectionsTableName,
-    IndexName: 'ChannelIndex',
+    IndexName: 'ConnectionsChannelIndex',
     KeyConditionExpression: 'channelId = :channelId',
     ExpressionAttributeValues: {
       ':channelId': channelId,
@@ -100,6 +100,7 @@ const saveSnippet = async (event, channelId, snippet) => {
     },
   });
   await sendMessageToChannel(event, channelId, { snippetId, snippet });
+  return { snippetId, snippet };
 };
 
 export const connectionHandler = websocketHandler(async (event) => {
@@ -128,7 +129,11 @@ export const defaultHandler = websocketHandler(async (event) => {
       );
       break;
     case 'SAVE_SNIPPET':
-      await saveSnippet(event, payload.data.channelId, payload.data.snippet);
-      return { action: 'NEW_SNIPPET', data: { snippet: payload.data.snippet } };
+      const response = await saveSnippet(
+        event,
+        payload.data.channelId,
+        payload.data.snippet,
+      );
+      return { action: 'NEW_SNIPPET', data: response };
   }
 });

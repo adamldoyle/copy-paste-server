@@ -53,7 +53,7 @@ provider:
                 [
                   { 'Fn::GetAtt': [ConnectionsTable, Arn] },
                   'index',
-                  'ChannelIndex',
+                  'ConnectionsChannelIndex',
                 ],
               ],
           }
@@ -65,7 +65,7 @@ provider:
                 [
                   { 'Fn::GetAtt': [SnippetsTable, Arn] },
                   'index',
-                  'ChannelIndex',
+                  'SnippetsChannelIndex',
                 ],
               ],
           }
