@@ -56,10 +56,13 @@ const joinChannel = async (connectionId, channelId) => {
       ':channelId': channelId,
     },
   });
-  return results.Items.map((item) => ({
-    snippetId: item.snippetId,
-    snippet: item.snippet,
-  }));
+  return results.Items.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)).map(
+    ({ snippetId, snippet, createdAt }) => ({
+      snippetId,
+      snippet,
+      createdAt,
+    }),
+  );
 };
 
 const leaveChannel = async (connectionId, channelId) => {
@@ -100,19 +103,21 @@ const getChannelConnections = async (channelId) => {
 
 const saveSnippet = async (event, channelId, snippet) => {
   const snippetId = v4();
+  const createdAt = Date.now();
   await dynamodb.put({
     TableName: process.env.snippetsTableName,
     Item: {
       snippetId,
       channelId,
       snippet,
+      createdAt,
     },
   });
   await sendMessageToChannel(event, channelId, {
     action: 'NEW_SNIPPET',
-    data: { snippetId, snippet },
+    data: { snippetId, snippet, createdAt },
   });
-  return { snippetId, snippet };
+  return { snippetId, snippet, createdAt };
 };
 
 export const connectionHandler = websocketHandler(async (event) => {
